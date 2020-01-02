@@ -1,0 +1,137 @@
+[
+  {
+    "size": 10,
+    "loop_type": "for",
+    "execution_time": 0.004087
+  },
+  {
+    "size": 10,
+    "loop_type": "list comprehension",
+    "execution_time": 0.000139
+  },
+  {
+    "size": 10,
+    "loop_type": "while",
+    "execution_time": 0.00266
+  },
+  {
+    "size": 10,
+    "loop_type": "zip",
+    "execution_time": 8.6e-05
+  },
+  {
+    "size": 10,
+    "loop_type": "apply",
+    "execution_time": 0.003497
+  },
+  {
+    "size": 10,
+    "loop_type": "numpy",
+    "execution_time": 0.000334
+  },
+  {
+    "size": 10,
+    "loop_type": "pandas",
+    "execution_time": 0.001718
+  },
+  {
+    "size": 10,
+    "loop_type": "iterrows",
+    "execution_time": 0.001862
+  },
+  {
+    "size": 10,
+    "loop_type": "itertuples",
+    "execution_time": 0.003845
+  },
+  {
+    "size": 100,
+    "loop_type": "for",
+    "execution_time": 0.039656
+  },
+  {
+    "size": 100,
+    "loop_type": "list comprehension",
+    "execution_time": 0.000213
+  },
+  {
+    "size": 100,
+    "loop_type": "while",
+    "execution_time": 0.028971
+  },
+  {
+    "size": 100,
+    "loop_type": "zip",
+    "execution_time": 0.000135
+  },
+  {
+    "size": 100,
+    "loop_type": "apply",
+    "execution_time": 0.003856
+  },
+  {
+    "size": 100,
+    "loop_type": "numpy",
+    "execution_time": 0.000303
+  },
+  {
+    "size": 100,
+    "loop_type": "pandas",
+    "execution_time": 0.000652
+  },
+  {
+    "size": 100,
+    "loop_type": "iterrows",
+    "execution_time": 0.017831
+  },
+  {
+    "size": 100,
+    "loop_type": "itertuples",
+    "execution_time": 0.037005
+  },
+  {
+    "size": 1000,
+    "loop_type": "for",
+    "execution_time": 0.279455
+  },
+  {
+    "size": 1000,
+    "loop_type": "list comprehension",
+    "execution_time": 0.00062
+  },
+  {
+    "size": 1000,
+    "loop_type": "while",
+    "execution_time": 0.263011
+  },
+  {
+    "size": 1000,
+    "loop_type": "zip",
+    "execution_time": 0.000694
+  },
+  {
+    "size": 1000,
+    "loop_type": "apply",
+    "execution_time": 0.02627
+  },
+  {
+    "size": 1000,
+    "loop_type": "numpy",
+    "execution_time": 0.000332
+  },
+  {
+    "size": 1000,
+    "loop_type": "pandas",
+    "execution_time": 0.000691
+  },
+  {
+    "size": 1000,
+    "loop_type": "iterrows",
+    "execution_time": 0.161811
+  },
+  {
+    "size": 1000,
+    "loop_type": "itertuples",
+    "execution_time": 0.318032
+  }
+]

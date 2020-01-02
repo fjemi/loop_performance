@@ -9,6 +9,9 @@ verify_ssl = true
 flask = "*"
 pandas = "*"
 tqdm = "*"
+modin = {extras = ["dask"],version = "*"}
+py = "*"
+timeme = "*"
 
 [requires]
 python_version = "3.8"

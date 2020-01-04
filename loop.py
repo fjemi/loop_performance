@@ -13,35 +13,41 @@ from timeme import timeme
 # Web/JSON
 from flask import jsonify
 import json
-
+# decorators
+from functools import wraps
 
 
 def add(a, b):
     '''Calculate the sum of two integers'''
-    return (a + b) * 2
-
-def pythagorean(a, b):
-    '''Calculate the hypotnuse of a triangle given the lengths of side a, b'''
-    return sqrt(a**2 + b**2)
-
-# add timeit decorater
-
+    #return (a + b) * 2
+    return a**2 + b**2
+    
 
 @dataclass
 class Result:
     size: int
     loop_type: str
-    execution_time: float
+    execution_time: int = field(default=None)
     
  
 @dataclass
 class Loop:
     size: int = field(default=None, repr=False)
     df: pd.DataFrame = field(default=None, repr=False)
-    results: List = field(default_factory=list)
+    #results: List = field(default_factory=list)
     result: List[Result] = field(default_factory=list, repr=False)
     
-    @timeme
+    
+    def _timeit(func):
+        '''Decorator hidden from the class methods'''                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
+        def wrapper(self, *args, **kwargs):
+            start = datetime.utcnow()
+            result = func(self, *args, **kwargs)
+            result['execution_time'] = (datetime.utcnow() - start).total_seconds()
+            self.result.append(result)
+        return wrapper
+        
+        
     def set_df(self, size):
         '''Create or load pickled dataframe after initilization'''
         try:            
@@ -53,143 +59,100 @@ class Loop:
             df = pd.DataFrame(np.random.randint(0, 1000, size=(size, 2)), columns=list('ab'))
             # Pickle pandas object
             df.to_pickle('df.pkl')
-            df['c'] = 0
             
         finally:
             self.df = df
             self.size = size
             
             
+    @_timeit        
     def use_list_comprehension(self, loop):
-        '''Use for loop to iterate'''
-        start = datetime.utcnow()
-        c = [add(a, b) for a, b in zip(self.df.a, self.df.b)]
-        runtime = (datetime.utcnow() - start).total_seconds()
-        result = asdict(Result(self.size, loop, runtime))
-        self.result.append(result)
-            
+        [add(a, b) for a, b in zip(self.df.a, self.df.b)]
+        return asdict(Result(self.size, loop))
+        
     
+    @_timeit 
     def use_for(self, loop):
-        '''Use for loop to iterate'''
-        start = datetime.utcnow()
         for i in range(0, len(self.df)):
-            self.df.c.iloc[i] = add(self.df.a.iloc[i], self.df.a.iloc[i])
-        runtime = (datetime.utcnow() - start).total_seconds()
-        result = asdict(Result(self.size, loop, runtime))
-        self.result.append(result)
+            add(self.df.a.iloc[i], self.df.a.iloc[i])
+        return asdict(Result(self.size, loop))
         
-        
+    
+    @_timeit     
     def use_while(self, loop):
-        '''Use while loop to iterate'''
-        start = datetime.utcnow()
-        
         i = len(self.df) - 1
-        
         while i != 0:
-            self.df.c.iloc[i] = add(self.df.a.iloc[i], self.df.a.iloc[i])
+            add(self.df.a.iloc[i], self.df.a.iloc[i])
             i = i - 1
-            
-        runtime = (datetime.utcnow() - start).total_seconds()
-        result = asdict(Result(self.size, loop, runtime))
-        self.result.append(result)
+        return asdict(Result(self.size, loop))
         
-        
+    
+    @_timeit     
     def use_zip(self, loop):
-        '''Use zip function to iterate'''
-        start = datetime.utcnow()
+        for (a, b) in zip(self.df.a, self.df.b):
+            add(a, b)
+        return asdict(Result(self.size, loop))
         
-        for (a, b, c) in zip(self.df.a, self.df.b, self.df.c):
-            c = add(a, b)
+    
+    @_timeit 
+    def use_apply(self, loop):   
+        self.df.apply(lambda x: add(x['a'], x['b']), axis=1)
+        return asdict(Result(self.size, loop))
         
-        runtime = (datetime.utcnow() - start).total_seconds()
-        result = asdict(Result(self.size, loop, runtime))
-        self.result.append(result)
-        
-        
-    def use_apply(self, loop):
-        '''Use apply function to iterate'''
-        start = datetime.utcnow()
-        
-        self.df.c = self.df.apply(lambda x: add(x['a'], x['b']), axis=1)
-        
-        runtime = (datetime.utcnow() - start).total_seconds()
-        result = asdict(Result(self.size, loop, runtime))
-        self.result.append(result)
-        
-        
+    
+    @_timeit 
     def use_map(self, loop):
-        '''Use apply function to iterate'''
-        start = datetime.utcnow()
+        self.df.map(lambda x: add(x['a'], x['b']), axis=1)
+        return asdict(Result(self.size, loop))
         
-        self.df.c = self.df.map(lambda x: add(x['a'], x['b']), axis=1)
-        
-        runtime = (datetime.utcnow() - start).total_seconds()
-        result = asdict(Result(self.size, loop, runtime))
-        self.result.append(result)
-        
-        
+    
+    @_timeit 
     def use_pandas(self, loop):
-        '''Use pandas to iterate'''
-        start = datetime.utcnow()
+        add(self.df['a'], self.df['b'])
+        return asdict(Result(self.size, loop))
         
-        self.df.c = add(self.df['a'], self.df['b'])
-        
-        runtime = (datetime.utcnow() - start).total_seconds()
-        result = asdict(Result(self.size, loop, runtime))
-        self.result.append(result)
-        
-        
+    
+    @_timeit 
     def use_numpy(self, loop):
-        '''Use numpy to iterate'''
-        start = datetime.utcnow()
+        add(self.df.b.values, self.df.a.values)
+        return asdict(Result(self.size, loop))
         
-        self.df.c = add(self.df.b.values, self.df.a.values)
-        
-        runtime = (datetime.utcnow() - start).total_seconds()
-        result = asdict(Result(self.size, loop, runtime))
-        self.result.append(result)
-        
-        
+    
+    @_timeit     
     def use_iterrows(self, loop):
-        '''Use iterrows to iterate'''
-        start = datetime.utcnow()
-        
         for index, row in self.df.iterrows():
-            row.c = add(row.a, row.b)
-        
-        runtime = (datetime.utcnow() - start).total_seconds()
-        result = asdict(Result(self.size, loop, runtime))
-        self.result.append(result)
+            add(row.a, row.b)
+        return asdict(Result(self.size, loop))
 
-
+    
+    @_timeit 
     def use_itertuples(self, loop):
-        '''Use iterrows to iterate'''
-        start = datetime.utcnow()
-        
         for row in self.df.itertuples():
-            self.df.c.iloc[row.Index] = add(row.a, row.b)
-        #self.df.c = df.iterrows(add(a, b))
+            add(row.a, row.b)
+        return asdict(Result(self.size, loop))
         
-        runtime = (datetime.utcnow() - start).total_seconds()
-        result = asdict(Result(self.size, loop, runtime))
-        self.result.append(result)
-        
-        
+    
+    @_timeit 
     def use_iter_while(self, loop):
-        '''Use iter and custom while loop'''
-        start = datetime.utcnow()
+        iterator = iter(self.df.values)
+        stop_loop = False
         
-        for row in self.df.itertuples():
-            pass
-        runtime = (datetime.utcnow() - start).total_seconds()
-        result = asdict(Result(self.size, loop, runtime))
-        self.result.append(result)
-        
+        while not stop_loop:
+            try: 
+                iterator = next(iterator)
+                add(iterator[0], iterator[1])
+            
+            except:
+                stop_loop = True
 
-# Execute when script is run from CLI        
+        return asdict(Result(self.size, loop))
+        
+    
+# Execute when script is run as main module       
 if __name__ == '__main__':
     sizes = [10, 100, 1000]
-    iterators = ['for', 'list_comprehension', 'while', 'zip', 'apply', 'pandas', 'iterrows', 'itertuples']#, 'iter_while']
+    iterators = ['for', 'list_comprehension', 'while', 'zip', 'apply', 'pandas', 'numpy', 'iterrows', 'itertuples', 'iter_while'] 
+
     # Initialize a Loop object
     l = Loop()
     

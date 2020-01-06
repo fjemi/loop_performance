@@ -2,66 +2,66 @@
   {
     "size": 10000,
     "loop_type": "for",
-    "execution_time": 0.93278
+    "execution_time": 0.394267
   },
   {
     "size": 10000,
     "loop_type": "list_comprehension",
-    "execution_time": 0.030182
+    "execution_time": 0.011073
   },
   {
     "size": 10000,
     "loop_type": "while",
-    "execution_time": 0.954825
+    "execution_time": 0.442281
   },
   {
     "size": 10000,
     "loop_type": "zip",
-    "execution_time": 0.028301
+    "execution_time": 0.013972
   },
   {
     "size": 10000,
     "loop_type": "apply",
-    "execution_time": 0.769661
+    "execution_time": 0.285974
   },
   {
     "size": 10000,
     "loop_type": "pandas",
-    "execution_time": 0.003967
+    "execution_time": 0.001325
   },
   {
     "size": 10000,
     "loop_type": "numpy",
-    "execution_time": 0.000275
+    "execution_time": 6.9e-05
   },
   {
     "size": 10000,
     "loop_type": "map",
-    "execution_time": 0.001708
+    "execution_time": 0.00058
   },
   {
     "size": 10000,
     "loop_type": "filter",
-    "execution_time": 0.001999
+    "execution_time": 0.000417
   },
   {
     "size": 10000,
     "loop_type": "itertools",
-    "execution_time": 0.072904
+    "execution_time": 0.025371
   },
   {
     "size": 10000,
     "loop_type": "iterrows",
-    "execution_time": 3.350849
+    "execution_time": 1.64315
   },
   {
     "size": 10000,
     "loop_type": "itertuples",
-    "execution_time": 0.050415
+    "execution_time": 0.043563
   },
   {
     "size": 10000,
     "loop_type": "iter_while",
-    "execution_time": 0.046068
+    "execution_time": 0.075382
   }
 ]

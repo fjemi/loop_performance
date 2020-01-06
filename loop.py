@@ -2,6 +2,7 @@
 #import modin.pandas as pd
 import pandas as pd
 import numpy as np
+import perfplot
 # data modeling
 import attr
 from typing import Dict, List
@@ -187,6 +188,7 @@ if __name__ == '__main__':
     with open('data.json', 'w') as file:
         json.dump(l.result, file, indent=2)
     print(json.dumps(l.result, indent=2))
+    
     
     
 '''
